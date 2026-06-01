@@ -1,0 +1,52 @@
+import { BaseService } from "../base/base.service";
+import type { 
+  Category, 
+  CreateCategoryRequest, 
+  UpdateCategoryRequest, 
+  UpdateCategoryStatusRequest,
+  ApiResponse, 
+  PaginationRequest, 
+  PaginationResponse 
+} from "@/types";
+
+export class CategoryService extends BaseService {
+  async getAll(): Promise<ApiResponse<Category[]>> {
+    return this.post<ApiResponse<Category[]>>("/categories/all");
+  }
+
+  async getList(pagination: PaginationRequest): Promise<ApiResponse<PaginationResponse<Category>>> {
+    return this.post<ApiResponse<PaginationResponse<Category>>>("/categories/list", pagination);
+  }
+
+  async getDetail(id: number): Promise<ApiResponse<Category>> {
+    return this.post<ApiResponse<Category>>("/categories/detail", { id });
+  }
+
+  async create(payload: CreateCategoryRequest): Promise<ApiResponse<null>> {
+    return this.post<ApiResponse<null>>("/categories/create", payload);
+  }
+
+  async update(payload: UpdateCategoryRequest): Promise<ApiResponse<null>> {
+    return this.post<ApiResponse<null>>("/categories/update", payload);
+  }
+
+  async updateStatus(payload: UpdateCategoryStatusRequest): Promise<ApiResponse<null>> {
+    return this.post<ApiResponse<null>>("/categories/status-update", payload);
+  }
+
+  async softDelete(id: number): Promise<ApiResponse<null>> {
+    return this.post<ApiResponse<null>>("/categories/soft-delete", { id });
+  }
+
+  async forceDelete(id: number): Promise<ApiResponse<null>> {
+    return this.post<ApiResponse<null>>("/categories/force-delete", { id });
+  }
+
+  async bulkSoftDelete(ids: number[]): Promise<ApiResponse<null>> {
+    return this.post<ApiResponse<null>>("/categories/bulk-soft-delete", { ids });
+  }
+
+  async bulkUpdateStatus(ids: number[], status: boolean): Promise<ApiResponse<null>> {
+    return this.post<ApiResponse<null>>("/categories/bulk-status-update", { ids, status });
+  }
+}

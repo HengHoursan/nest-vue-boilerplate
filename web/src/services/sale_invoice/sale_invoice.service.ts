@@ -1,0 +1,49 @@
+import { BaseService } from "../base/base.service";
+import type { 
+  SaleInvoice,
+  LowStockWarning,
+  CreateSaleInvoiceRequest, 
+  UpdateSaleInvoiceRequest,
+  UpdateSaleInvoiceStatusRequest,
+  ApiResponse, 
+  PaginationRequest, 
+  PaginationResponse 
+} from "@/types";
+
+export interface SaleInvoiceWithWarnings extends SaleInvoice {
+  lowStockWarnings: LowStockWarning[];
+}
+
+export class SaleInvoiceService extends BaseService {
+  async getList(pagination: PaginationRequest): Promise<ApiResponse<PaginationResponse<SaleInvoice>>> {
+    return this.post<ApiResponse<PaginationResponse<SaleInvoice>>>("/sale-invoices/list", pagination);
+  }
+
+  async getDetail(id: number): Promise<ApiResponse<SaleInvoice>> {
+    return this.post<ApiResponse<SaleInvoice>>("/sale-invoices/detail", { id });
+  }
+
+  async create(payload: CreateSaleInvoiceRequest): Promise<ApiResponse<SaleInvoiceWithWarnings>> {
+    return this.post<ApiResponse<SaleInvoiceWithWarnings>>("/sale-invoices/create", payload);
+  }
+
+  async update(payload: UpdateSaleInvoiceRequest): Promise<ApiResponse<SaleInvoiceWithWarnings>> {
+    return this.post<ApiResponse<SaleInvoiceWithWarnings>>("/sale-invoices/update", payload);
+  }
+
+  async updateStatus(payload: UpdateSaleInvoiceStatusRequest): Promise<ApiResponse<null>> {
+    return this.post<ApiResponse<null>>("/sale-invoices/status-update", payload);
+  }
+
+  async softDelete(id: number): Promise<ApiResponse<null>> {
+    return this.post<ApiResponse<null>>("/sale-invoices/soft-delete", { id });
+  }
+
+  async forceDelete(id: number): Promise<ApiResponse<null>> {
+    return this.post<ApiResponse<null>>("/sale-invoices/force-delete", { id });
+  }
+
+  async delete(id: number): Promise<ApiResponse<null>> {
+    return this.softDelete(id);
+  }
+}
