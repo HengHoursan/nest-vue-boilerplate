@@ -61,93 +61,9 @@ export function formatFullDateTime(
 }
 
 /**
- * Formats a date for filenames (YYYY-MM-DD_HH-mm)
- */
-export function formatDateForFilename(date: Date = new Date()): string {
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  const yyyy = date.getFullYear();
-  const MM = pad(date.getMonth() + 1);
-  const dd = pad(date.getDate());
-  const HH = pad(date.getHours());
-  const mm = pad(date.getMinutes());
-  return `${yyyy}-${MM}-${dd}_${HH}-${mm}`;
-}
-
-import { useCurrencyStore } from "@/stores/currency";
-
-/**
- * Formats a number as a currency string using the active system currency.
- */
-export function formatCurrency(
-  amount: number | string | null | undefined,
-): string {
-  let currencyStore;
-  try {
-    currencyStore = useCurrencyStore();
-  } catch (e) {
-    // Fallback if accessed outside of Pinia context
-  }
-
-  const symbol = currencyStore?.activeCurrency?.symbol ?? "$";
-  const rate = currencyStore?.activeCurrency?.exchangeRate ?? 1;
-  const value = typeof amount === "string" ? parseFloat(amount) : amount;
-
-  // Convert value based on exchange rate
-  const convertedValue = (value || 0) * rate;
-
-  const formatted = new Intl.NumberFormat(getLocale(), {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(convertedValue);
-
-  return `${symbol}${formatted}`;
-}
-
-/**
  * Converts a Date object to a local ISO string (YYYY-MM-DDTHH:mm) suitable for input[type="datetime-local"].
  */
 export function toLocalISOString(date: Date): string {
   const tzOffset = date.getTimezoneOffset() * 60000;
   return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
-}
-
-/**
- * Formats an exchange rate naturally (no trailing zeros, up to 4 decimals).
- */
-export function formatRate(rate: number | string | null | undefined): string {
-  const value = Number(rate || 0);
-  return new Intl.NumberFormat(getLocale(), {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 4,
-  }).format(value);
-}
-
-/**
- * Formats a raw number or string input into a comma-separated string (e.g., "1,000.50").
- * Preserves trailing decimals while typing to prevent cursor issues.
- */
-export function formatNumberInput(
-  value: string | number | null | undefined,
-): string {
-  if (!value && value !== 0) return "";
-  let str = String(value)
-    .replace(/,/g, "")
-    .replace(/[^\d.]/g, "");
-  const parts = str.split(".");
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  if (parts.length > 2) parts.length = 2; // Keep max 1 decimal point
-  return parts.join(".");
-}
-
-/**
- * Formats quantity inputs without fixed trailing decimals.
- * Examples: "10.00" -> "10", "10.50" -> "10.5", "1,000.00" -> "1,000"
- */
-export function formatQuantityInput(
-  value: string | number | null | undefined,
-): string {
-  const formatted = formatNumberInput(value);
-  if (!formatted.includes(".")) return formatted;
-
-  return formatted.replace(/(\.\d*?[1-9])0+$/, "$1").replace(/\.0+$/, "");
 }
