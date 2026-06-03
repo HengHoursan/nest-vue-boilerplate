@@ -13,9 +13,9 @@ export const seedUsers = async (dataSource: DataSource) => {
 
   const superAdminRole = await getRole('superadmin');
   const adminRole = await getRole('admin');
-  const cashierRole = await getRole('cashier');
+  const userRole = await getRole('user');
 
-  if (!superAdminRole || !adminRole || !cashierRole) {
+  if (!superAdminRole || !adminRole || !userRole) {
     console.error('❌ Required roles not found. Run role seeding first.');
     return;
   }
@@ -34,22 +34,22 @@ export const seedUsers = async (dataSource: DataSource) => {
       role: adminRole,
     },
     {
-      username: 'cashier1',
-      email: 'cashier1@gmail.com',
-      plainPassword: 'cashier123',
-      role: cashierRole,
+      username: 'user1',
+      email: 'user1@gmail.com',
+      plainPassword: 'user123',
+      role: userRole,
     },
     {
-      username: 'cashier2',
-      email: 'cashier2@gmail.com',
-      plainPassword: 'cashier123',
-      role: cashierRole,
+      username: 'user2',
+      email: 'user2@gmail.com',
+      plainPassword: 'user123',
+      role: userRole,
     },
     {
-      username: 'cashier3',
-      email: 'cashier3@gmail.com',
-      plainPassword: 'cashier123',
-      role: cashierRole,
+      username: 'user3',
+      email: 'user3@gmail.com',
+      plainPassword: 'user123',
+      role: userRole,
     },
   ];
 

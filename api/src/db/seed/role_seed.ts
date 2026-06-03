@@ -11,7 +11,7 @@ export const seedRoles = async (dataSource: DataSource) => {
   const roles = [
     { name: 'superadmin', displayName: 'Super Admin' },
     { name: 'admin', displayName: 'Administrator' },
-    { name: 'cashier', displayName: 'Cashier' },
+    { name: 'user', displayName: 'User' },
   ];
 
   for (const r of roles) {
@@ -44,31 +44,11 @@ export const seedRoles = async (dataSource: DataSource) => {
           ),
         },
       });
-    } else if (role.name === 'cashier') {
-      // Cashier gets POS and Sales related permissions
+    } else if (role.name === 'user') {
+      // User gets basic view permissions
       permissionsToAssign = await permissionRepo.find({
         where: [
-          { name: In(['customer:view', 'customer:all']) },
-          { group: 'Sale Order Management' },
-          { group: 'Sale Invoice Management' },
-          { group: 'Sale Payment Management' },
-          { group: 'Sale Return Management' },
-          { group: 'Sale Quotation Management' },
-          { group: 'Transaction Management' },
-          { name: In(['product:all', 'product:view']) },
-          {
-            name: In([
-              'category:all',
-              'category:view',
-              'brand:all',
-              'brand:view',
-              'unit:all',
-              'unit:view',
-              'discount:all',
-              'discount:view',
-              'currency:all',
-            ]),
-          },
+          { name: In(['user:view']) },
         ],
       });
     }

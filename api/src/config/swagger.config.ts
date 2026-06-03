@@ -2,9 +2,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 
 export function setupSwagger(app: INestApplication): void {
+  const appName = process.env.APP_NAME || 'API';
   const config = new DocumentBuilder()
-    .setTitle('Stock POS API')
-    .setDescription('The Stock and Point of Sale API description')
+    .setTitle(`${appName} Documentation`)
+    .setDescription(`The ${appName} description`)
     .setVersion('1.0')
     .addBearerAuth(
       {
