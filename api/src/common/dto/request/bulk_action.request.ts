@@ -1,10 +1,8 @@
-import { IsArray, IsNumber, IsNotEmpty } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class BulkActionRequest {
-  @ApiProperty({ example: [1, 2, 3], description: 'Array of record IDs' })
-  @IsArray()
-  @IsNumber({}, { each: true })
-  @IsNotEmpty()
-  ids: number[];
-}
+export const BulkActionRequestSchema = z.object({
+  ids: z.array(z.number()).min(1),
+});
+
+export class BulkActionRequest extends createZodDto(BulkActionRequestSchema) {}

@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class CreateRoleRequest {
-  @IsNotEmpty()
-  @IsString()
-  name: string;
-}
+export const CreateRoleRequestSchema = z.object({
+  name: z.string().min(1),
+});
+
+export class CreateRoleRequest extends createZodDto(CreateRoleRequestSchema) {}

@@ -1,24 +1,12 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  MaxLength,
-  MinLength,
-  IsOptional,
-} from 'class-validator';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class UpdateProfileRequest {
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(60)
-  username: string;
+export const UpdateProfileRequestSchema = z.object({
+  username: z.string().min(3).max(60),
+  email: z.string().email(),
+  photo: z.string().optional(),
+});
 
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
-
-  @IsString()
-  @IsOptional()
-  photo?: string;
-}
+export class UpdateProfileRequest extends createZodDto(
+  UpdateProfileRequestSchema,
+) {}

@@ -1,23 +1,14 @@
-import { IsOptional, IsString, IsNumber } from 'class-validator';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class UpdatePermissionRequest {
-  @IsOptional()
-  @IsNumber()
-  id: number;
+export const UpdatePermissionRequestSchema = z.object({
+  id: z.number(),
+  name: z.string().optional(),
+  displayName: z.string().optional(),
+  group: z.string().optional(),
+  sort: z.number().optional(),
+});
 
-  @IsOptional()
-  @IsString()
-  name?: string;
-
-  @IsOptional()
-  @IsString()
-  displayName?: string;
-
-  @IsOptional()
-  @IsString()
-  group?: string;
-
-  @IsOptional()
-  @IsNumber()
-  sort?: number;
-}
+export class UpdatePermissionRequest extends createZodDto(
+  UpdatePermissionRequestSchema,
+) {}

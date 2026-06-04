@@ -1,19 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class UpdateImageRequest {
+export const UpdateImageRequestSchema = z.object({
+  old_image_url: z.string().min(1),
+  new_image: z.any().optional(),
+});
+
+export class UpdateImageRequest extends createZodDto(UpdateImageRequestSchema) {
   @ApiProperty({
     type: 'string',
     format: 'binary',
-    required: true,
+    required: false,
   })
-  @IsOptional()
-  new_image: Express.Multer.File;
+  new_image?: Express.Multer.File;
 
   @ApiProperty({
     required: true,
   })
-  @IsString()
-  @IsNotEmpty()
   old_image_url: string;
 }

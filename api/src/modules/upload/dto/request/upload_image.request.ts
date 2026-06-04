@@ -1,11 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class UploadImageRequest {
+export const UploadImageRequestSchema = z.object({
+  image: z.any(),
+});
+
+export class UploadImageRequest extends createZodDto(UploadImageRequestSchema) {
   @ApiProperty({
     type: 'string',
     format: 'binary',
   })
-  @IsNotEmpty()
   image: Express.Multer.File;
 }

@@ -1,9 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class IdRequest {
-  @ApiProperty({ example: 1, description: 'The ID of the resource' })
-  @IsNumber()
-  @IsNotEmpty()
-  id: number;
-}
+export const IdRequestSchema = z.object({
+  id: z.coerce.number(),
+});
+
+export class IdRequest extends createZodDto(IdRequestSchema) {}

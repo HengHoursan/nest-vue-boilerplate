@@ -1,12 +1,11 @@
-import { IsNotEmpty, IsNumber, IsArray } from 'class-validator';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class AssignPermissionsRequest {
-  @IsNotEmpty()
-  @IsNumber()
-  roleId: number;
+export const AssignPermissionsRequestSchema = z.object({
+  roleId: z.number(),
+  permissionIds: z.array(z.number()),
+});
 
-  @IsNotEmpty()
-  @IsArray()
-  @IsNumber({}, { each: true })
-  permissionIds: number[];
-}
+export class AssignPermissionsRequest extends createZodDto(
+  AssignPermissionsRequestSchema,
+) {}

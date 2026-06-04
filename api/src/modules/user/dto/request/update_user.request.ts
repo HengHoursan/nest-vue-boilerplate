@@ -1,27 +1,13 @@
-import { IsOptional, IsString, IsEmail, IsNumber } from 'class-validator';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class UpdateUserRequest {
-  @IsOptional()
-  @IsNumber()
-  id: number;
+export const UpdateUserRequestSchema = z.object({
+  id: z.number(),
+  username: z.string().optional(),
+  password: z.string().optional(),
+  email: z.string().email().optional(),
+  roleId: z.number().optional(),
+  photo: z.string().optional(),
+});
 
-  @IsOptional()
-  @IsString()
-  username?: string;
-
-  @IsOptional()
-  @IsString()
-  password?: string;
-
-  @IsOptional()
-  @IsEmail()
-  email?: string;
-
-  @IsOptional()
-  @IsNumber()
-  roleId?: number;
-
-  @IsString()
-  @IsOptional()
-  photo?: string;
-}
+export class UpdateUserRequest extends createZodDto(UpdateUserRequestSchema) {}

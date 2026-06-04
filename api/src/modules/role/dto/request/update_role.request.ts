@@ -1,11 +1,9 @@
-import { IsOptional, IsString, IsNumber } from 'class-validator';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class UpdateRoleRequest {
-  @IsOptional()
-  @IsNumber()
-  id: number;
+export const UpdateRoleRequestSchema = z.object({
+  id: z.number(),
+  name: z.string().optional(),
+});
 
-  @IsOptional()
-  @IsString()
-  name?: string;
-}
+export class UpdateRoleRequest extends createZodDto(UpdateRoleRequestSchema) {}

@@ -1,43 +1,18 @@
-import {
-  IsOptional,
-  IsInt,
-  Min,
-  IsString,
-  IsObject,
-  Max,
-  IsIn,
-} from 'class-validator';
-import { Type, Transform } from 'class-transformer';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class PaginationRequest {
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  page: number = 1;
+export const PaginationRequestSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(500).default(10),
+  search: z.string().optional(),
+  filter: z.record(z.string(), z.string()).optional(),
+  sortBy: z.string().default('id'),
+  sortOrder: z
+    .preprocess(
+      (val) => (typeof val === 'string' ? val.toUpperCase() : val),
+      z.enum(['ASC', 'DESC']),
+    )
+    .default('DESC'),
+});
 
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  @Max(500)
-  limit: number = 10;
-
-  @IsOptional()
-  @IsString()
-  search?: string;
-
-  @IsOptional()
-  @IsObject()
-  filter?: Record<string, string>;
-
-  @IsOptional()
-  @IsString()
-  sortBy: string = 'id';
-
-  @IsOptional()
-  @IsString()
-  @Transform(({ value }) => value?.toUpperCase() || 'DESC')
-  @IsIn(['ASC', 'DESC'])
-  sortOrder: 'ASC' | 'DESC' = 'DESC';
-}
+export class PaginationRequest extends createZodDto(PaginationRequestSchema) {}

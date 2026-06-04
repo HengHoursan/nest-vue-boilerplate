@@ -1,15 +1,11 @@
-import { IsArray, IsNumber, IsNotEmpty, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class BulkEnumStatusUpdateRequest {
-  @ApiProperty({ example: [1, 2, 3], description: 'Array of record IDs' })
-  @IsArray()
-  @IsNumber({}, { each: true })
-  @IsNotEmpty()
-  ids: number[];
+export const BulkEnumStatusUpdateRequestSchema = z.object({
+  ids: z.array(z.number()).min(1),
+  status: z.string().min(1),
+});
 
-  @ApiProperty({ example: 'COMPLETED', description: 'Target enum status' })
-  @IsString()
-  @IsNotEmpty()
-  status: string;
-}
+export class BulkEnumStatusUpdateRequest extends createZodDto(
+  BulkEnumStatusUpdateRequestSchema,
+) {}

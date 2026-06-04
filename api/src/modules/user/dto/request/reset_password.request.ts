@@ -1,12 +1,11 @@
-import { IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator';
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
 
-export class ResetPasswordRequest {
-  @IsNumber()
-  @IsNotEmpty()
-  userId: number;
+export const ResetPasswordRequestSchema = z.object({
+  userId: z.number(),
+  newPassword: z.string().min(6),
+});
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(6)
-  newPassword: string;
-}
+export class ResetPasswordRequest extends createZodDto(
+  ResetPasswordRequestSchema,
+) {}

@@ -47,9 +47,7 @@ export const seedRoles = async (dataSource: DataSource) => {
     } else if (role.name === 'user') {
       // User gets basic view permissions
       permissionsToAssign = await permissionRepo.find({
-        where: [
-          { name: In(['user:view']) },
-        ],
+        where: [{ name: In(['user:view']) }],
       });
     }
 
